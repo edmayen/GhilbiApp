@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.ghilbiapp.view.core.BottomNavigationBar
 import com.example.ghilbiapp.view.core.CustomTopAppBar
+import com.example.ghilbiapp.view.library.LibraryScreen
 
 @Preview
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,7 +36,7 @@ fun HomeScreen() {
         },
         containerColor = MaterialTheme.colorScheme.background,
         content = { innerPadding ->
-            Surface(modifier = Modifier.padding(innerPadding)) { }
+            LibraryScreen(modifier = Modifier.padding(innerPadding))
         },
     )
 }

@@ -16,16 +16,16 @@ import com.example.ghilbiapp.R
 @Composable
 fun CustomTopAppBar(
     title: String,
+    modifier: Modifier = Modifier,
     isVisibleNavIcon: Boolean = false,
-    onBackClicked: () -> Unit = {},
-    modifier: Modifier = Modifier
+    onBackClicked: () -> Unit = {}
 ) {
     CenterAlignedTopAppBar(
         title = {
             Text(
                 text = title,
                 color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleMedium
             )
         },
         navigationIcon = { if (isVisibleNavIcon) {
@@ -34,12 +34,13 @@ fun CustomTopAppBar(
                 ){
                     Icon(
                         painter = painterResource(R.drawable.baseline_arrow_back),
-                        contentDescription = "Perfil del usuario",
+                        contentDescription = "",
                         tint = MaterialTheme.colorScheme.primary
                     )
                 }
             }
-        }
+        },
+        modifier = modifier
     )
 }
 
