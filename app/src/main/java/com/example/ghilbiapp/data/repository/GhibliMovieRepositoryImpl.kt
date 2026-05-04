@@ -3,6 +3,7 @@ package com.example.ghilbiapp.data.repository
 import com.example.ghilbiapp.data.api.ApiService
 import com.example.ghilbiapp.data.api.response.toDomain
 import com.example.ghilbiapp.domain.model.GhibliMovieModel
+import com.example.ghilbiapp.domain.model.MovieDetailModel
 import com.example.ghilbiapp.domain.repository.GhibliMovieRepository
 import com.example.ghilbiapp.utils.Resource
 import kotlinx.coroutines.Dispatchers
@@ -18,6 +19,16 @@ class GhibliMovieRepositoryImpl @Inject constructor(
             try {
                 val response = apiService.fetchMovies()
                 Resource.Success(response.map { it.toDomain() })
+            } catch (e: Exception) {
+                Resource.Error(e.message ?: "Unknown error")
+            }
+        }
+
+    override suspend fun getMovieDetail(movieId: String): Resource<MovieDetailModel> =
+        withContext(Dispatchers.IO) {
+            try {
+                val response = apiService.getMovieDetail(movieId)
+                Resource.Success(response.toDomain())
             } catch (e: Exception) {
                 Resource.Error(e.message ?: "Unknown error")
             }

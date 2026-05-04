@@ -3,6 +3,7 @@ package com.example.ghilbiapp.di
 import com.example.ghilbiapp.data.api.ApiService
 import com.example.ghilbiapp.data.repository.GhibliMovieRepositoryImpl
 import com.example.ghilbiapp.domain.repository.GhibliMovieRepository
+import com.example.ghilbiapp.domain.usecases.MovieDetailUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -37,5 +38,9 @@ object DataModule {
     @Provides
     fun providesGhibliMoviesRepository(apiService: ApiService): GhibliMovieRepository =
         GhibliMovieRepositoryImpl(apiService)
+
+    @Provides
+    fun providesMovieDetailUseCase(movieRepository: GhibliMovieRepository): MovieDetailUseCase =
+        MovieDetailUseCase(movieRepository)
 
 }
