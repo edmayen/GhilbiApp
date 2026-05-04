@@ -27,10 +27,11 @@ import com.example.ghilbiapp.domain.model.GhibliMovieModel
 @Composable
 fun GhibliMovieCard(
     movie: GhibliMovieModel,
-    onClick: (String) -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
+        onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 12.dp)

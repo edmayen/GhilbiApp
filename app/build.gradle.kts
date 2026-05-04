@@ -71,14 +71,13 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.adapter)
 
-    //Nav3
-    implementation(libs.androidx.navigation3.runtime)
-    implementation(libs.androidx.navigation3.ui)
-
     //Image
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
 
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.compose)
+
+    implementation("androidx.navigation:navigation-compose:2.9.8")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
 }

@@ -36,7 +36,7 @@ fun MovieBanner(
     Card(
         modifier = modifier
             .fillMaxWidth().padding(vertical = 12.dp)
-            .aspectRatio(4f/2f),
+            .aspectRatio(4f/3f),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
     ) {
