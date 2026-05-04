@@ -27,6 +27,7 @@ import com.example.ghilbiapp.domain.model.GhibliMovieModel
 @Composable
 fun GhibliMovieCard(
     movie: GhibliMovieModel,
+    onClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
