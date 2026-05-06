@@ -3,14 +3,21 @@ package com.example.ghilbiapp.view.moviedetail
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +34,7 @@ import com.example.ghilbiapp.ui.theme.Blue
 import com.example.ghilbiapp.ui.theme.LightOrange
 import com.example.ghilbiapp.utils.Utils.toFormattedDuration
 import com.example.ghilbiapp.utils.Utils.toFormattedScore
+import com.example.ghilbiapp.view.core.CharacterItem
 import com.example.ghilbiapp.view.core.FavoriteButton
 import com.example.ghilbiapp.view.core.InfoChip
 import com.example.ghilbiapp.view.core.MovieBanner
@@ -74,7 +82,6 @@ private fun MovieDetailContent(
     Column(
         modifier = modifier
             .padding(horizontal = 16.dp)
-
             .verticalScroll(rememberScrollState())
     ) {
         Spacer(Modifier.height(16.dp))
@@ -106,6 +113,82 @@ private fun MovieDetailContent(
         MovieDescription(
             synopsis = movieDetailData.description
         )
+
+        Spacer(modifier = Modifier.height(32.dp))
+        CharactersSection(
+            charactersState = movieDetailData.charactersState
+        )
+        Spacer(modifier = Modifier.height(32.dp))
     }
 
+}
+
+@Composable
+fun CharactersSection(
+    charactersState: CharactersUiState,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier.fillMaxWidth()) {
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(bottom = 12.dp)
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_cast),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(24.dp)
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            Text(
+                text = "Main Characters",
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.primary
+            )
+        }
+
+        when (charactersState) {
+            is CharactersUiState.Loading -> {
+                Box(
+                    modifier = Modifier.fillMaxWidth().height(100.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+
+            is CharactersUiState.Success -> {
+                val charactersList = charactersState.characters
+
+                if (charactersList.isEmpty()) {
+                    Text(
+                        text = "No characters listed for this movie.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                } else {
+                    LazyRow(
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        contentPadding = PaddingValues(end = 16.dp)
+                    ) {
+                        items(
+                            items = charactersList,
+                            key = { it.id }
+                        ) { character ->
+                            CharacterItem(character = character)
+                        }
+                    }
+                }
+            }
+
+            is CharactersUiState.Error -> {
+                Text(
+                    text = charactersState.message,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+        }
+    }
 }

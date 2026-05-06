@@ -126,7 +126,8 @@ private fun Preview() {
         runningTime = "124",
         rtScore = "95",
         image = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/npOnzAbLh6VOIu3naU5QaEcTepo.jpg",
-        movieBanner = "https://image.tmdb.org/t/p/w533_and_h300_bestv2/3cyjYtLWCBE1uvWINHFsFnE8LUK.jpg"
+        movieBanner = "https://image.tmdb.org/t/p/w533_and_h300_bestv2/3cyjYtLWCBE1uvWINHFsFnE8LUK.jpg",
+        characterUrls = emptyList()
     )
     MovieBanner(
         movieDetail = movie,

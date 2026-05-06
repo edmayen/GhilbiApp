@@ -17,7 +17,8 @@ data class MovieDetailResponse(
     val producer: String,
     @SerialName("release_date") val releaseDate: String,
     @SerialName("running_time") val runningTime: String,
-    @SerialName("rt_score") val rtScore: String
+    @SerialName("rt_score") val rtScore: String,
+    val people: List<String>
 )
 
 fun MovieDetailResponse.toDomain(): MovieDetailModel = MovieDetailModel(
@@ -32,5 +33,6 @@ fun MovieDetailResponse.toDomain(): MovieDetailModel = MovieDetailModel(
     runningTime = runningTime,
     rtScore = rtScore,
     image = image,
-    movieBanner = movieBanner
+    movieBanner = movieBanner,
+    characterUrls = people
 )

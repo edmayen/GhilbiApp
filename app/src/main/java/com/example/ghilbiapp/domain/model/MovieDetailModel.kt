@@ -1,5 +1,7 @@
 package com.example.ghilbiapp.domain.model
 
+import com.example.ghilbiapp.view.moviedetail.CharactersUiState
+
 data class MovieDetailModel(
     val id: String,
     val title: String,
@@ -12,5 +14,7 @@ data class MovieDetailModel(
     val runningTime: String,
     val rtScore: String,
     val image: String,
-    val movieBanner: String
+    val movieBanner: String,
+    val characterUrls: List<String>,
+    val charactersState: CharactersUiState = CharactersUiState.Loading
 )

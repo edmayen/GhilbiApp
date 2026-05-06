@@ -57,11 +57,7 @@ fun HomeScreen() {
                 }
 
                 composable<MovieDetailRoute> { backStackEntry ->
-                    // ¡No necesitas extraer el ID aquí en la UI!
-                    // El ViewModel lo hará por ti en el siguiente paso.
-                    MovieDetailScreen(
-                        // Hilt inyectará el ViewModel automáticamente aquí
-                    )
+                    MovieDetailScreen()
                 }
             }
         },

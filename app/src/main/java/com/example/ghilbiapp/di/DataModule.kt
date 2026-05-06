@@ -3,7 +3,9 @@ package com.example.ghilbiapp.di
 import com.example.ghilbiapp.data.api.ApiService
 import com.example.ghilbiapp.data.repository.GhibliMovieRepositoryImpl
 import com.example.ghilbiapp.domain.repository.GhibliMovieRepository
+import com.example.ghilbiapp.domain.usecases.GetCharactersUseCase
 import com.example.ghilbiapp.domain.usecases.MovieDetailUseCase
+import com.example.ghilbiapp.domain.usecases.ObserveFavoriteStatusUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -42,5 +44,13 @@ object DataModule {
     @Provides
     fun providesMovieDetailUseCase(movieRepository: GhibliMovieRepository): MovieDetailUseCase =
         MovieDetailUseCase(movieRepository)
+
+    @Provides
+    fun providesGetCharactersUseCase(movieRepository: GhibliMovieRepository): GetCharactersUseCase =
+        GetCharactersUseCase(movieRepository)
+
+    @Provides
+    fun providesObserveFavoriteStatusUseCase(): ObserveFavoriteStatusUseCase =
+        ObserveFavoriteStatusUseCase()
 
 }
