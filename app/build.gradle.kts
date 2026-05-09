@@ -11,6 +11,10 @@ kotlin {
     jvmToolchain(21)
 }
 
+ksp {
+    arg("room.generateKotlin", "true")
+}
+
 android {
     namespace = "com.example.ghilbiapp"
     compileSdk {
@@ -70,6 +74,11 @@ dependencies {
     //Retrofit
     implementation(libs.retrofit)
     implementation(libs.retrofit.adapter)
+
+    //Room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 
     //Image
     implementation(libs.coil.compose)
