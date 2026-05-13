@@ -58,7 +58,8 @@ fun MovieDetailScreen(
             is MovieDetailUiState.Success -> {
                 MovieDetailContent(
                     movieDetailData = currentState.movie,
-                    modifier = Modifier
+                    modifier = Modifier,
+                    onFavoriteClicked = { viewModel.onFavoriteClick() }
                 )
             }
             is MovieDetailUiState.Error -> {
@@ -77,7 +78,8 @@ fun MovieDetailScreen(
 @Composable
 private fun MovieDetailContent(
     movieDetailData: MovieDetailModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onFavoriteClicked: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -107,7 +109,8 @@ private fun MovieDetailContent(
         }
         Spacer(modifier = Modifier.height(24.dp))
         FavoriteButton(
-            onClick = { /* TODO: Guardar en base de datos local / Room */ }
+            isFavorite = movieDetailData.isFavorite,
+            onClick = { onFavoriteClicked() }
         )
         Spacer(modifier = Modifier.height(24.dp))
         MovieDescription(
@@ -151,7 +154,9 @@ fun CharactersSection(
         when (charactersState) {
             is CharactersUiState.Loading -> {
                 Box(
-                    modifier = Modifier.fillMaxWidth().height(100.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(100.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     CircularProgressIndicator()

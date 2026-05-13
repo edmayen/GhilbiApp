@@ -19,29 +19,34 @@ import com.example.ghilbiapp.R
 
 @Composable
 fun FavoriteButton(
+    isFavorite: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val containerColor = if (isFavorite) Color(0xFFE91E63) else Color(0xFF757575)
+    val iconRes = R.drawable.ic_heart
+    val textMessage = if (isFavorite) "Saved in Favorites" else "Add to Favorites"
+
     Button(
         onClick = onClick,
         modifier = modifier.height(48.dp),
         shape = CircleShape,
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFF855D00),
+            containerColor = containerColor,
             contentColor = Color.White
         ),
         elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
     ) {
         Icon(
-            painter = painterResource(id = R.drawable.ic_heart),
-            contentDescription = "Agregar a favoritos",
+            painter = painterResource(id = iconRes),
+            contentDescription = textMessage,
             modifier = Modifier.size(20.dp)
         )
 
         Spacer(modifier = Modifier.width(8.dp))
 
         Text(
-            text = "Add to Favorites",
+            text = textMessage,
             style = MaterialTheme.typography.labelLarge
         )
     }

@@ -7,9 +7,6 @@ import com.example.ghilbiapp.data.db.FavoriteMovieDao
 import com.example.ghilbiapp.data.db.GhibliDatabase
 import com.example.ghilbiapp.data.repository.GhibliMovieRepositoryImpl
 import com.example.ghilbiapp.domain.repository.GhibliMovieRepository
-import com.example.ghilbiapp.domain.usecases.GetCharactersUseCase
-import com.example.ghilbiapp.domain.usecases.MovieDetailUseCase
-import com.example.ghilbiapp.domain.usecases.ObserveFavoriteStatusUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -61,19 +58,12 @@ object DataModule {
     }
 
     @Provides
-    fun providesGhibliMoviesRepository(apiService: ApiService): GhibliMovieRepository =
-        GhibliMovieRepositoryImpl(apiService)
-
-    @Provides
-    fun providesMovieDetailUseCase(movieRepository: GhibliMovieRepository): MovieDetailUseCase =
-        MovieDetailUseCase(movieRepository)
-
-    @Provides
-    fun providesGetCharactersUseCase(movieRepository: GhibliMovieRepository): GetCharactersUseCase =
-        GetCharactersUseCase(movieRepository)
-
-    @Provides
-    fun providesObserveFavoriteStatusUseCase(): ObserveFavoriteStatusUseCase =
-        ObserveFavoriteStatusUseCase()
-
+    fun providesGhibliMoviesRepository(
+        apiService: ApiService,
+        favoriteDao: FavoriteMovieDao
+    ): GhibliMovieRepository =
+        GhibliMovieRepositoryImpl(
+            apiService = apiService,
+            favoriteDao = favoriteDao
+        )
 }

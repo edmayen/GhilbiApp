@@ -19,25 +19,55 @@ import com.example.ghilbiapp.view.moviedetail.MovieDetailScreen
 import com.example.ghilbiapp.view.navigation.LibraryRoute
 import com.example.ghilbiapp.view.navigation.MovieDetailRoute
 
+import androidx.compose.runtime.getValue
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.ghilbiapp.view.favorites.FavoritesScreen
+import com.example.ghilbiapp.view.navigation.FavoritesRoute
+
+import androidx.navigation.NavDestination.Companion.hasRoute
+
 @Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen() {
     val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val destination = navBackStackEntry?.destination
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
+            val isDetail = destination?.hasRoute<MovieDetailRoute>() == true
             CustomTopAppBar(
-                title = "Ghibli Theater",
-                isVisibleNavIcon = true,
-                onBackClicked = {}
+                title = if (isDetail) "Movie Details" else "Ghibli Theater",
+                isVisibleNavIcon = isDetail,
+                onBackClicked = { navController.popBackStack() }
             )
         },
         bottomBar = {
             BottomNavigationBar(
-                currentRoute = "library",
+                currentRoute = when {
+                    destination?.hasRoute<LibraryRoute>() == true -> "library"
+                    destination?.hasRoute<FavoritesRoute>() == true -> "favorites"
+                    else -> null
+                },
                 onNavigate = { route ->
-                    
+                    when(route) {
+                        "library" -> navController.navigate(LibraryRoute) {
+                            popUpTo(navController.graph.startDestinationId) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                        "favorites" -> navController.navigate(FavoritesRoute) {
+                            popUpTo(navController.graph.startDestinationId) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    }
                 }
             )
         },
@@ -50,6 +80,14 @@ fun HomeScreen() {
             ) {
                 composable<LibraryRoute> {
                     LibraryScreen(
+                        onMovieClick = { movieId ->
+                            navController.navigate(MovieDetailRoute(movieId = movieId))
+                        }
+                    )
+                }
+
+                composable<FavoritesRoute> {
+                    FavoritesScreen(
                         onMovieClick = { movieId ->
                             navController.navigate(MovieDetailRoute(movieId = movieId))
                         }

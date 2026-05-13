@@ -6,7 +6,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.example.ghilbiapp.domain.usecases.GetCharactersUseCase
 import com.example.ghilbiapp.domain.usecases.MovieDetailUseCase
-import com.example.ghilbiapp.domain.usecases.ObserveFavoriteStatusUseCase
+import com.example.ghilbiapp.domain.usecases.ObserveIsFavoriteUseCase
+import com.example.ghilbiapp.domain.usecases.ToggleFavoriteUseCase
 import com.example.ghilbiapp.utils.Resource
 import com.example.ghilbiapp.view.navigation.MovieDetailRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,13 +22,16 @@ class MovieDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val movieDetailUseCase: MovieDetailUseCase,
     private val getCharactersUseCase: GetCharactersUseCase,
-    private val observeFavoriteStatusUseCase: ObserveFavoriteStatusUseCase
+    private val observeFavoriteUseCase: ObserveIsFavoriteUseCase,
+    private val toggleFavoriteUseCase: ToggleFavoriteUseCase
 ): ViewModel() {
     private val routeData = savedStateHandle.toRoute<MovieDetailRoute>()
     private val movieId = routeData.movieId
 
     private val _uiState = MutableStateFlow<MovieDetailUiState>(MovieDetailUiState.Idle)
     val uiState = _uiState.asStateFlow()
+
+    private val _isFavorite = MutableStateFlow(false)
 
     init {
         loadData()
@@ -41,7 +45,9 @@ class MovieDetailViewModel @Inject constructor(
             when (val movieResult = movieDetailUseCase(movieId)) {
                 is Resource.Success -> {
                     val movie = movieResult.data!!
-                    _uiState.update { MovieDetailUiState.Success(movie) }
+                    _uiState.update { 
+                        MovieDetailUiState.Success(movie.copy(isFavorite = _isFavorite.value)) 
+                    }
                     loadCharacters(movie.characterUrls)
                 }
                 is Resource.Error -> {
@@ -96,19 +102,29 @@ class MovieDetailViewModel @Inject constructor(
 
     private fun observeFavoriteStatus() {
         viewModelScope.launch {
-            // Room nos permite devolver un Flow, así que reaccionará en tiempo real
-            // si el usuario agrega o quita la película de favoritos.
-//            observeFavoriteStatusUseCase(movieId).collect { isFavorite ->
-//                val currentState = _uiState.value
-//                if (currentState is MovieDetailUiState.Success) {
-//                    _uiState.update {
-//                        currentState.copy(
-//                            movie = currentState.movie.copy(isFavorite = isFavorite)
-//                        )
-//                    }
-//                }
-//            }
+            observeFavoriteUseCase(movieId).collect { isFavorite ->
+                _isFavorite.value = isFavorite
+                val currentState = _uiState.value
+                if (currentState is MovieDetailUiState.Success) {
+                    _uiState.update {
+                        currentState.copy(
+                            movie = currentState.movie.copy(isFavorite = isFavorite)
+                        )
+                    }
+                }
+            }
         }
     }
+    fun onFavoriteClick() {
+        val currentState = _uiState.value
+        if (currentState is MovieDetailUiState.Success) {
+            viewModelScope.launch {
+                val movie = currentState.movie
+                toggleFavoriteUseCase(movie, movie.isFavorite)
+            }
+        }
+    }
+
+
 
 }
